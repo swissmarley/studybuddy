@@ -1,6 +1,6 @@
-# StudyBuddy AI
+# 📚 StudyBuddy AI 🧑‍🔬
 
-StudyBuddy AI turns your learning materials into a complete, AI‑powered study kit. Upload documents, images, audio, or video and get a transcript, concise summary, flashcards, a mind map, practice quizzes, and relevant YouTube videos — plus a Notes section to capture your own thoughts while studying.
+StudyBuddy AI turns your learning materials into a complete, AI‑powered study kit. Upload documents, images, audio, or video and get a transcript, concise summary, flashcards, a mind map, practice quizzes, and relevant YouTube videos, plus a Notes section to capture your own thoughts while studying.
 
 ## Features
 - Content upload: `.pdf`, `.md`, `.txt`, `.png`, `.jpg`, `.mp3`, `.mp4` (and `.docx`).
@@ -32,14 +32,23 @@ StudyBuddy AI turns your learning materials into a complete, AI‑powered study 
   - `GOOGLE_API_KEY` for YouTube Data API v3
 
 ### Setup
-1. Clone the repository and install dependencies:
+1. Clone the repository
+   - `git clone https://github.com/swissmarley/studybuddy.git`
+     
+2. Install dependencies:
    - `npm install`
-2. Create a `.env.local` file in the project root with:
+
+3. Build application:
+   - `npm run build`
+     
+4. Create a `.env.local` file in the project root with:
    - `GEMINI_API_KEY=your_gemini_api_key`
    - `GOOGLE_API_KEY=your_youtube_data_api_key`
-3. Start the dev server:
+     
+6. Start the dev server:
    - `npm run dev`
-4. Open the app at:
+     
+7. Open the app at:
    - http://localhost:9002
 
 (Optional) Genkit Dev UI for inspecting flows:
