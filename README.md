@@ -37,18 +37,18 @@ StudyBuddy AI turns your learning materials into a complete, AI‑powered study 
      
 2. Install dependencies:
    - `npm install`
-
-3. Build application:
-   - `npm run build`
      
-4. Create a `.env.local` file in the project root with:
+3. Create a `.env.local` file in the project root with:
    - `GEMINI_API_KEY=your_gemini_api_key`
    - `GOOGLE_API_KEY=your_youtube_data_api_key`
+  
+4. Build application:
+   - `npm run build`
      
-6. Start the dev server:
+5. Start the dev server:
    - `npm run dev`
      
-7. Open the app at:
+6. Open the app at:
    - http://localhost:9002
 
 (Optional) Genkit Dev UI for inspecting flows:
