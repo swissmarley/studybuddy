@@ -19,6 +19,7 @@ import * as mammoth from "mammoth";
 
 import type { StudyKit, StudyKitView } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { createStudyKit, getAllStudyKits, deleteStudyKit } from '@/lib/api';
 
 import { transcribeContent } from '@/ai/flows/transcribe-content';
 import { generateContentSummary } from '@/ai/flows/generate-content-summary';
@@ -63,23 +64,22 @@ export default function Home() {
   const { toast } = useToast();
 
   useEffect(() => {
-    try {
-      const savedKits = localStorage.getItem('study-kits');
-      if (savedKits) {
-        setStudyKits(JSON.parse(savedKits));
+    const loadStudyKits = async () => {
+      try {
+        const kits = await getAllStudyKits();
+        setStudyKits(kits);
+      } catch (error) {
+        console.error("Failed to load study kits from database", error);
+        toast({
+          variant: 'destructive',
+          title: 'Failed to load study kits',
+          description: 'Could not connect to database. Using offline mode.',
+        });
       }
-    } catch (error) {
-      console.error("Failed to load study kits from localStorage", error);
-    }
-  }, []);
+    };
+    loadStudyKits();
+  }, [toast]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('study-kits', JSON.stringify(studyKits));
-    } catch (error) {
-        console.error("Failed to save study kits to localStorage", error);
-    }
-  }, [studyKits]);
 
 
   const handleFileProcess = async (file: File) => {
@@ -123,21 +123,19 @@ export default function Home() {
         linkRelevantYouTubeVideos({ topic: summary, language }),
       ]);
       
-      const newKit: StudyKit = {
-        id: Date.now().toString(),
+      const newKitData = {
         title: file.name,
-        createdAt: new Date().toISOString(),
         summary,
         transcription,
         flashcards: flashcardsResult.flashcards,
         mindMap: mindMapResult.mindMap,
         quiz: quizResult.quiz,
         youtubeLinks: youtubeLinksResult.videoLinks,
-      }
+      };
       
-      const newKits = [...studyKits, newKit];
-      setStudyKits(newKits);
-      setActiveKitId(newKit.id);
+      const savedKit = await createStudyKit(newKitData);
+      setStudyKits(prev => [...prev, savedKit]);
+      setActiveKitId(savedKit.id);
       setAppState('viewing');
 
     } catch (error) {
@@ -153,8 +151,22 @@ export default function Home() {
     }
   };
 
-  const handleDeleteKit = (kitId: string) => {
-    setStudyKits(kits => kits.filter(k => k.id !== kitId));
+  const handleDeleteKit = async (kitId: string) => {
+    try {
+      await deleteStudyKit(kitId);
+      setStudyKits(kits => kits.filter(k => k.id !== kitId));
+      toast({
+        title: 'Study kit deleted',
+        description: 'The study kit has been permanently removed.',
+      });
+    } catch (error) {
+      console.error('Failed to delete study kit:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Failed to delete study kit',
+        description: 'Could not delete the study kit. Please try again.',
+      });
+    }
   }
 
   const activeKit = useMemo(() => studyKits.find(kit => kit.id === activeKitId), [studyKits, activeKitId]);
