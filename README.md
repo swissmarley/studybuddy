@@ -20,6 +20,7 @@ StudyBuddy AI turns your learning materials into a complete, AI‑powered study 
 
 ## Tech
 - Next.js (App Router) + TypeScript + Tailwind CSS
+- PostgresSQL (Backend Database)
 - Genkit with Google AI (Gemini) for LLM tasks
 - YouTube Data API v3 for relevant video search
 
@@ -41,14 +42,18 @@ StudyBuddy AI turns your learning materials into a complete, AI‑powered study 
 3. Create a `.env.local` file in the project root with:
    - `GEMINI_API_KEY=your_gemini_api_key`
    - `GOOGLE_API_KEY=your_youtube_data_api_key`
+   - `DATABASE_URL=postgresql://username:password@host-ip:5432/db-name`
   
-4. Build application:
+4. Initialize the database:
+   - `npx drizzle-kit push`
+  
+5. Build the application:
    - `npm run build`
      
-5. Start the dev server:
+6. Start the dev server:
    - `npm run dev`
      
-6. Open the app at:
+7. Open the app at:
    - http://localhost:9002
 
 (Optional) Genkit Dev UI for inspecting flows:
