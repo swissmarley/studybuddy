@@ -116,12 +116,17 @@ export default function Home() {
       const summaryResult = await generateContentSummary({ content });
       const summary = summaryResult.summary;
 
+      console.log('Starting AI processing with summary:', summary.substring(0, 100) + '...');
+      console.log('Language detected:', language);
+      
       const [flashcardsResult, mindMapResult, quizResult, youtubeLinksResult] = await Promise.all([
         generateFlashcards({ content }),
         createMindMap({ content }),
         generateQuiz({ content }),
         linkRelevantYouTubeVideos({ topic: summary, language }),
       ]);
+      
+      console.log('YouTube links result:', youtubeLinksResult);
       
       const newKitData = {
         title: file.name,
