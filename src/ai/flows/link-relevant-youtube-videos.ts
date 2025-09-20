@@ -56,14 +56,23 @@ const linkRelevantYouTubeVideosFlow = ai.defineFlow({
     outputSchema: LinkRelevantYouTubeVideosOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    if (!output?.videoLinks) {
-        return { videoLinks: [] };
+    try {
+      console.log(`Searching for YouTube videos for topic: "${input.topic}"`);
+      const {output} = await prompt(input);
+      
+      if (!output?.videoLinks) {
+          console.log('No video links returned from prompt');
+          return { videoLinks: [] };
+      }
+
+      const youtubeWatchUrlRegex = /^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{11}$/;
+      const validLinks = output.videoLinks.filter(link => youtubeWatchUrlRegex.test(link));
+      
+      console.log(`Found ${output.videoLinks.length} video links, ${validLinks.length} valid after filtering`);
+      return { videoLinks: validLinks };
+    } catch (error) {
+      console.error('Error in linkRelevantYouTubeVideosFlow:', error);
+      return { videoLinks: [] };
     }
-
-    const youtubeWatchUrlRegex = /^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{11}$/;
-    const validLinks = output.videoLinks.filter(link => youtubeWatchUrlRegex.test(link));
-
-    return { videoLinks: validLinks };
   }
 );
